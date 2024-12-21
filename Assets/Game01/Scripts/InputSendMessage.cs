@@ -5,12 +5,10 @@ public class InputSendMessage : MonoBehaviour
 {
     private PlayerInput playerInput;
     private Vector2 vector2;
-    private Rigidbody rb;
     CharacterMove characterMove;
 
     private void Awake()
     {
-        rb = TryGetComponent(out rb) ? rb : gameObject.AddComponent<Rigidbody>();
         playerInput = TryGetComponent(out playerInput) ? playerInput : gameObject.AddComponent<PlayerInput>();
         characterMove = GetComponent<CharacterMove>();
     }

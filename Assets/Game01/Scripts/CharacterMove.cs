@@ -4,9 +4,11 @@ public class CharacterMove : MonoBehaviour
 {
     [SerializeField] private float playerRotateSpeed = 5f;
     [SerializeField] private float playerMoveSpeed = 3f;
+    private Rigidbody rb;
+    
     private void Awake()
     {
-        
+        rb = TryGetComponent(out rb) ? rb : gameObject.AddComponent<Rigidbody>();
     }
 
     public void Move(Vector2 inputVector)
