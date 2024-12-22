@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class InputSendMessage : MonoBehaviour
 {
+    private const string MOVE = "Move";
     private PlayerInput playerInput;
     private Vector2 vector2;
     CharacterMove characterMove;
@@ -16,14 +17,14 @@ public class InputSendMessage : MonoBehaviour
     private void OnEnable()
     {
         if (playerInput == null) return;
-        playerInput.actions["Move"].performed += OnMove;
-        playerInput.actions["Move"].canceled += OnMove;
+        playerInput.actions[MOVE].performed += OnMove;
+        playerInput.actions[MOVE].canceled += OnMove;
     }
 
     private void OnDisable()
     {
         if (playerInput == null) return;
-        playerInput.actions["Move"].performed -= OnMove;
+        playerInput.actions[MOVE].performed -= OnMove;
     }
 
     private void Update()

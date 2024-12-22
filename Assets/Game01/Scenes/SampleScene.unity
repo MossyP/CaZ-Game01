@@ -643,7 +643,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
@@ -1021,7 +1021,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1953592473}
   - component: {fileID: 1953592472}
-  - component: {fileID: 1953592471}
   - component: {fileID: 1953592470}
   - component: {fileID: 1953592469}
   - component: {fileID: 1953592474}
@@ -1129,14 +1128,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &1953592471
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1953592468}
-  m_Enabled: 1
 --- !u!20 &1953592472
 Camera:
   m_ObjectHideFlags: 0
