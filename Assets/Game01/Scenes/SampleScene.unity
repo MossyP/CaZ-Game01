@@ -672,7 +672,7 @@ GameObject:
   - component: {fileID: 1256127108}
   - component: {fileID: 1256127109}
   - component: {fileID: 1256127111}
-  - component: {fileID: 1256127110}
+  - component: {fileID: 1256127112}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -709,6 +709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f5126a1f7e47142b8a392eb34817ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHP: 10
   playerRotateSpeed: 5
   playerMoveSpeed: 10
 --- !u!54 &1256127108
@@ -768,20 +769,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1256127110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1256127105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b4f0e82eb18b304ea93f5711b33a74b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerRotateSpeed: 18
-  playerMoveSpeed: 15
 --- !u!114 &1256127111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794,6 +781,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eb63d25ce4f2044ab86de34181ea71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1256127112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256127105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f5126a1f7e47142b8a392eb34817ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHP: 10
+  playerRotateSpeed: 5
+  playerMoveSpeed: 3
 --- !u!1 &1360371914
 GameObject:
   m_ObjectHideFlags: 0

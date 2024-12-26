@@ -6,12 +6,12 @@ public class InputSendMessage : MonoBehaviour
     private const string MOVE = "Move";
     private PlayerInput playerInput;
     private Vector2 vector2;
-    CharacterMove characterMove;
+    private Player player;
 
     private void Awake()
     {
         playerInput = TryGetComponent(out playerInput) ? playerInput : gameObject.AddComponent<PlayerInput>();
-        characterMove = GetComponent<CharacterMove>();
+        player = GetComponent<Player>();
     }
 
     private void OnEnable()
@@ -29,7 +29,7 @@ public class InputSendMessage : MonoBehaviour
 
     private void Update()
     {
-        characterMove.Move(vector2);
+        player.Move(vector2);
     }
 
     private void OnMove(InputAction.CallbackContext context)
