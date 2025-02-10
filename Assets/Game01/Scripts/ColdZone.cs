@@ -21,7 +21,10 @@ public class ColdZone : MonoBehaviour, IEnvironmentEffect
     {
         if (other.CompareTag("Player"))
         {
+            
             ApplyEffect(other.GetComponent<Player>());
+            WarningUI.Instance.ShowWarning("寒冷地帯に入りました。鈍足になります。");
+
         }
     }
 
@@ -30,6 +33,8 @@ public class ColdZone : MonoBehaviour, IEnvironmentEffect
         if (other.CompareTag("Player"))
         {
             RemoveEffect(other.GetComponent<Player>());
+            //WarningUI.Instance.HideWarning();
+
         }
     }
 }

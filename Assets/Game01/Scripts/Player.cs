@@ -38,6 +38,16 @@ public class Player : MonoBehaviour
         isDead  = false;
         rb = TryGetComponent(out rb) ? rb : gameObject.AddComponent<Rigidbody>();
         baseMoveSpeed = playerMoveSpeed;
+        
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject); // すでに存在するインスタンスがあれば削除
+        }
     }
 
     public void Move(Vector2 inputVector)
@@ -152,5 +162,10 @@ public class Player : MonoBehaviour
     public void ResetSpeed()
     {
         playerMoveSpeed = baseMoveSpeed; // 速度を元に戻す
+    }
+    
+    public float PlayerHP
+    {
+        get { return playerHP; }
     }
 }
