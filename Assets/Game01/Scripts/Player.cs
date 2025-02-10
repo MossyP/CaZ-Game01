@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; } //シングルトン
     
+    private bool isTakingDamage = false;
+    public bool isSpeedProtected = false;
+    private bool isDamageProtected = false;
     private float coldPoint;
     private float coldPointMax = 100f;
-    private bool isDead = false;
+    private bool isDead;
     private List<string> haveCondition = new List<string>();
     private List<string> itemList = new List<string>();
     private Rigidbody rb;
@@ -18,30 +22,42 @@ public class Player : MonoBehaviour
     [SerializeField] private float playerMoveSpeed = 3f;
     private float baseMoveSpeed;
     
+    private Coroutine damageCoroutine;
+
+    private void Update()
+    {
+        Debug.Log(playerHP);
+        if (isDead)
+        {
+            playerMoveSpeed = 0f;
+        }
+    }
+
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-        
+        isDead  = false;
         rb = TryGetComponent(out rb) ? rb : gameObject.AddComponent<Rigidbody>();
         baseMoveSpeed = playerMoveSpeed;
     }
 
     public void Move(Vector2 inputVector)
     {
-        Vector3 MoveDir = new Vector3(inputVector.x, 0, inputVector.y);
-        MoveDir = MoveDir.normalized;
-        transform.forward = Vector3.Slerp(transform.forward, MoveDir, Time.deltaTime * playerRotateSpeed);
-        transform.position += MoveDir * playerMoveSpeed * Time.deltaTime;
+        if (isDead) return;
+        
+        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+        moveDir = moveDir.normalized;
+        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * playerRotateSpeed);
+        transform.position += moveDir * (playerMoveSpeed * Time.deltaTime);
     }
 
     public void TakeDamage(float damage)
     {
+        if (isDead || isDamageProtected) return;
+        
         playerHP -= damage;
         if (playerHP <= 0)
         {
+            playerHP = 0;
             isDead = true;
             CheckDead();
         }
@@ -52,57 +68,89 @@ public class Player : MonoBehaviour
         if (isDead)
         {
             Debug.Log("Dead");
+            StartCoroutine(DestroyAfterDelay(1f));
         }
     }
     
-    public void ApplyEffect(string effectName, float damage = 0, float speedModifier = 1f) //気候変動を受ける
+    private IEnumerator DestroyAfterDelay(float delay)
     {
-        if (!haveCondition.Contains(effectName))
-        {
-            haveCondition.Add(effectName);
-        }
+        yield return new WaitForSeconds(delay);  // 指定した時間を待つ
+        Destroy(gameObject);  // その後にオブジェクトを削除
+    }
 
-        // スピード低下（寒冷用）
-        playerMoveSpeed = baseMoveSpeed * speedModifier;
-
-        // ダメージ処理
-        if (damage > 0)
-        {
-            TakeDamage(damage);
-        }
-    }
-    
-    public void RemoveEffect(string effectName)
+    private IEnumerator DamageOverTime(float damagePerSecond)
     {
-        if (haveCondition.Contains(effectName))
+        isTakingDamage = true;
+        while (isTakingDamage)
         {
-            haveCondition.Remove(effectName);
-            playerMoveSpeed = baseMoveSpeed; // 元のスピードに
-        }
-    }
-    
-    
-    //防御アイテムの効果発動
-    public void ActivateProtection(string effectName, float duration)
-    {
-        if (!haveCondition.Contains(effectName))
-        {
-            haveCondition.Add(effectName);
-            StartCoroutine(RemoveProtectionAfterTime(effectName, duration));
+            TakeDamage(damagePerSecond);
+            yield return new WaitForSeconds(1f);
         }
     }
 
-    private System.Collections.IEnumerator RemoveProtectionAfterTime(string effectName, float duration)
+    public void StartTakingDamage(float damagePerSecond)
+    {
+        if (damageCoroutine == null)
+        {
+            damageCoroutine = StartCoroutine(DamageOverTime(damagePerSecond));
+        }
+    }
+
+    public void StopTakingDamage()
+    {
+        if (damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
+            isTakingDamage = false;
+        }
+    }
+
+    // ダメージ無効化を開始
+    public void StartDamageProtection(float duration)
+    {
+        if (!isDamageProtected)
+        {
+            isDamageProtected = true;
+            StartCoroutine(DamageProtectionTimer(duration));
+        }
+    }
+
+    // ダメージ無効化の効果時間を管理するコルーチン
+    private IEnumerator DamageProtectionTimer(float duration)
     {
         yield return new WaitForSeconds(duration);
-        haveCondition.Remove(effectName);
+        isDamageProtected = false; // 時間経過後に解除
     }
 
-    //防御中か判定
-    public bool HasProtection(string effectName)
+    // 鈍足無効化を開始
+    public void StartSpeedProtection(float duration)
     {
-        return haveCondition.Contains(effectName);
+        if (!isSpeedProtected)
+        {
+            isSpeedProtected = true;
+            StartCoroutine(SpeedProtectionTimer(duration));
+        }
     }
-    
-    
+
+    // 鈍足無効化の効果時間を管理するコルーチン
+    private IEnumerator SpeedProtectionTimer(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        isSpeedProtected = false; // 時間経過後に解除
+        
+        ResetSpeed();
+    }
+
+    // 移動速度を変更する
+    public void ModifySpeed(float multiplier)
+    {
+        playerMoveSpeed = baseMoveSpeed * multiplier;
+    }
+
+    // 移動速度を元に戻す
+    public void ResetSpeed()
+    {
+        playerMoveSpeed = baseMoveSpeed; // 速度を元に戻す
+    }
 }

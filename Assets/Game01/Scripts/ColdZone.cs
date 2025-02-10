@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public class ColdZone : MonoBehaviour
+public class ColdZone : MonoBehaviour, IEnvironmentEffect
 {
-    public string EffectName => "Cold Freeze";
-    public float slowDownFactor = 0.5f;
-    public int coldDamage = 1;
-    public float maxColdTime = 10f;
-    private float coldTimer = 0f;
+    [SerializeField] private float speedMultiplier = 0.5f; // 鈍足倍率（50%に遅くする）
 
-    private void OnTriggerStay(Collider other)
+    public void ApplyEffect(Player player)
+    {
+        if (!player.isSpeedProtected)
+        {
+            player.ModifySpeed(speedMultiplier); // 鈍足を適用
+        }
+    }
+
+    public void RemoveEffect(Player player)
+    {
+        player.ModifySpeed(1f); // 速度を元に戻す
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Player player = other.GetComponent<Player>();
-
-            // 防御中なら影響なし
-            if (player.HasProtection(EffectName)) return;
-
-            player.ApplyEffect(EffectName, coldDamage, slowDownFactor);
-            coldTimer += Time.deltaTime;
+            ApplyEffect(other.GetComponent<Player>());
         }
     }
 
@@ -26,8 +29,7 @@ public class ColdZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Player player = other.GetComponent<Player>();
-            player.RemoveEffect(EffectName);
+            RemoveEffect(other.GetComponent<Player>());
         }
     }
 }

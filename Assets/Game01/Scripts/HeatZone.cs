@@ -1,27 +1,24 @@
 using UnityEngine;
 
-public class HeatZone : MonoBehaviour
+public class HotZone : MonoBehaviour, IEnvironmentEffect
 {
-    public string EffectName => "Heat Wave";
-    public int damagePerSecond = 1;
-    private float damageInterval = 1f;
-    private float damageTimer = 0f;
+    [SerializeField] private float damagePerSecond = 1f; // 1秒ごとのダメージ
 
-    private void OnTriggerStay(Collider other)
+    public void ApplyEffect(Player player)
+    {
+        player?.StartTakingDamage(damagePerSecond); // ダメージ開始
+    }
+
+    public void RemoveEffect(Player player)
+    {
+        player?.StopTakingDamage(); // ダメージ停止
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Player player = other.GetComponent<Player>();
-
-            // 防御中ならダメージなし
-            if (player.HasProtection(EffectName)) return;
-
-            damageTimer += Time.deltaTime;
-            if (damageTimer >= damageInterval)
-            {
-                player.ApplyEffect(EffectName, damagePerSecond);
-                damageTimer = 0f;
-            }
+            ApplyEffect(other.GetComponent<Player>());
         }
     }
 
@@ -29,8 +26,7 @@ public class HeatZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Player player = other.GetComponent<Player>();
-            player.RemoveEffect(EffectName);
+            RemoveEffect(other.GetComponent<Player>());
         }
     }
 }
