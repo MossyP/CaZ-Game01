@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject); // すでに存在するインスタンスがあれば削除
+            Destroy(gameObject);
         }
     }
 
@@ -84,8 +84,8 @@ public class Player : MonoBehaviour
     
     private IEnumerator DestroyAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);  // 指定した時間を待つ
-        Destroy(gameObject);  // その後にオブジェクトを削除
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
     }
 
     private IEnumerator DamageOverTime(float damagePerSecond)
@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    // ダメージ無効化の効果時間を管理するコルーチン
+    // ダメージ無効化コルーチン
     private IEnumerator DamageProtectionTimer(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    // 鈍足無効化の効果時間を管理するコルーチン
+    // 鈍足無効化コルーチン
     private IEnumerator SpeedProtectionTimer(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -152,16 +152,16 @@ public class Player : MonoBehaviour
         ResetSpeed();
     }
 
-    // 移動速度を変更する
+    // 移動速度を変更
     public void ModifySpeed(float multiplier)
     {
         playerMoveSpeed = baseMoveSpeed * multiplier;
     }
 
-    // 移動速度を元に戻す
+    // 移動速度をリセット。
     public void ResetSpeed()
     {
-        playerMoveSpeed = baseMoveSpeed; // 速度を元に戻す
+        playerMoveSpeed = baseMoveSpeed;
     }
     
     public float PlayerHP

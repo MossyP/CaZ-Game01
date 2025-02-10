@@ -25,7 +25,7 @@ public class HeartDisplay : MonoBehaviour
         {
             if (i < health)
             {
-                hearts[i].sprite = fullHeart;  // HPがある分フルハート
+                hearts[i].sprite = fullHeart;  // HPがある分ハート
             }
             else
             {

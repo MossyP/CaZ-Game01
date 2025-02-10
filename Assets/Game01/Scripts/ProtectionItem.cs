@@ -8,19 +8,17 @@ public class ProtectionItem : MonoBehaviour, IItem
 
     public void ActivateProtection(Player player, float duration)
     {
-        // ダメージ防止
         if (protectDamage)
         {
             player.StartDamageProtection(duration);  // ダメージ保護を適用
         }
         
-        // 鈍足防止
         if (protectSlow)
         {
             player.StartSpeedProtection(duration);  // 鈍足保護を適用
         }
 
-        Destroy(gameObject);  // アイテムを使ったら消す
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)

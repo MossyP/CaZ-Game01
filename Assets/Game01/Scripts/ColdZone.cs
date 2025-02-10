@@ -33,7 +33,7 @@ public class ColdZone : MonoBehaviour, IEnvironmentEffect
         if (other.CompareTag("Player"))
         {
             RemoveEffect(other.GetComponent<Player>());
-            //WarningUI.Instance.HideWarning();
+            WarningUI.Instance.HideWarning();
 
         }
     }
